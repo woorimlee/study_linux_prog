@@ -1,0 +1,5 @@
+1. Use make command
+2. Run hw1 executable file
+3. If the Filename is popped up, find that randomly maked file using find command
+4. and then use grep command to search String
+5. Use cat command and check contents of randomly maked file.
