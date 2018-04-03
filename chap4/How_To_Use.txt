@@ -1,0 +1,8 @@
+1-1. 'fopen' is the file to open some file and check out that file's file descriptor.
+1-2. Type this : # ./fopen open_test.txt
+
+2-1. 'fsize' is intended to know the size of a file.
+2-2. Type this : # ./fsize 'some file's name'
+
+3-1. 'copy' a file A to B
+3-2. Type this : # ./copy copy_test_a.txt copy_test.b.txt
