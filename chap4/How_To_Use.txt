@@ -6,3 +6,21 @@
 
 3-1. 'copy' a file A to B
 3-2. Type this : # ./copy copy_test_a.txt copy_test.b.txt
+
+4-1. 'dup' is a guide how to use dup syscall
+4-2. Type this : # ./dup
+		 # cat dup_test
+
+5-1. 'student_info' is a file to store student num, name and score.
+5-2. Type this : # ./student_info studb1
+5-3. Add some students info
+5-4. 'student_query' is a file to check out student num, name and score stored in studb1
+5-5. Type this : # ./student_query studb1
+5-5. Type student num to see that student's name and score.
+5-6. 'student_update' is used to update student names and scores. 
+5-7. Type : # ./student_update studb1 
+5-8. Type student num to replace his or her names and scores. 
+
+
+
+
