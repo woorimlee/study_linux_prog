@@ -11,7 +11,8 @@
 4-2. Type this : # ./dup
 		 # cat dup_test
 
-5-1. 'student_info' is a file to store student num, name and score.
+Be careful. student nums started from 1. so just type num : 1, 2, 3, ... ,x
+5-1. 'student_info' is a file to store student num, name and score. 
 5-2. Type this : # ./student_info studb1
 5-3. Add some students info
 5-4. 'student_query' is a file to check out student num, name and score stored in studb1
