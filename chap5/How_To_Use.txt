@@ -2,4 +2,6 @@
 1-2. Use : # ./ftype filename 
 1-3. ex) # ./ftype ..
 
-
+2-1. 'fchmod' is a file to change the mod of file that is handed over to argv[2]
+2-2. Use : # ./fchmod mod filename
+2-3. ex) # ./fchmod 664 chmod_test
