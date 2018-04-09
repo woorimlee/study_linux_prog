@@ -1,0 +1,5 @@
+1-1. 'ftype' is a exe file that identifies type of the file that is handed over to argv[1]
+1-2. Use : # ./ftype filename 
+1-3. ex) # ./ftype ..
+
+
