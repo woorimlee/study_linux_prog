@@ -5,3 +5,9 @@
 2-1. 'fchmod' is a file to change the mod of file that is handed over to argv[2]
 2-2. Use : # ./fchmod mod filename
 2-3. ex) # ./fchmod 664 chmod_test
+
+3-1. 'cptime' is a file to change second file's(argv[2]) accesss time & modified time to first file's(argv[1]) each time value.
+3-2. Use : # ./cptime filename1 filename2
+3-3. ex) # ./cptime cptime_test1 cptime_test2
+
+
