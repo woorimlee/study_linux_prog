@@ -22,4 +22,17 @@
 6-2. Use : # ./l_option_ls dir(or NULL)
 6-3. ex) # ./l_option_ls
 
+7-1. 'link' : Hard linking exe file.
+7-2. Use : # ./link filename new_filename
+7-3. I already used 'link' file like this "# ./link link link_test"
 
+8-1. 'unlink' : unlinking link file.
+8-2. Use : # ./link link_filename
+
+9-1. 'slink' : symbolic linking exe file.
+9-2. Use : # ./slink filename new_filename
+9-3. I already used 'slink' file like this "# ./slink slink slink_test"
+
+10-1. 'read_slink' : reading symbolic link file's real contents.
+10-2. Use : # ./read_slink symbolic_link_filename
+10-3. ex) # ./read_slink slink_test
