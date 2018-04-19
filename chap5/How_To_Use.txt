@@ -10,4 +10,16 @@
 3-2. Use : # ./cptime filename1 filename2
 3-3. ex) # ./cptime cptime_test1 cptime_test2
 
+4-1. 'simple_ls' is a file that implements 'ls' command.
+4-2. Use : # ./simple_ls dir(or NULL) //NULL means '.'
+4-3. ex) # ./simple_ls 
+
+5-1. 's_option_ls' is a file that implements 'ls -s' command.
+5-2. Use : # ./s_option_ls dir(or NULL)
+5-3. ex) # ./s_option_ls
+
+6-1. 'l_option_ls' is a file that implements 'ls -l' command.
+6-2. Use : # ./l_option_ls dir(or NULL)
+6-3. ex) # ./l_option_ls
+
 
