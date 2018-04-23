@@ -6,3 +6,8 @@
 
 3-1. 'line_count' counts file A's total line number. 
 3-2. Use : # ./line_count fileA
+
+4-1. 'fprint' is a file to make student database with using fprintf();
+4-2. Use : # ./fprint studb1
+4-3. 'fscan' is a file to check student database with using fscanf();
+4-4. Use : # ./fscan studb1
