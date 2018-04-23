@@ -4,6 +4,6 @@
 1-4 Above two files(rdlock & wrlock) were maded to lock the file 'studb1' when they use that file.
 1-5 Use : # ./rdlock studb1
 1-6 Use : # ./wrlock studb1
-1-7 'wrlockf' is a file implement exactly the same file with wrlock, but use the function lockf() instead of fcntl().
+1-7 'wrlockf' is a file that implements exactly the same file with wrlock, but use the function lockf() instead of fcntl().
 1-8 Use : # ./wrlockf studb1
 
