@@ -1,0 +1,8 @@
+1-1 We use the exe file 'student_info' made chap 4. 
+1-2 'rdlock' is a file to read student's information.
+1-3 'wrlock' is a file to overwrite student's infomation.
+1-4 Above two files(rdlock & wrlock) were maded to lock the file 'studb1' when they use that file.
+1-5 Use : # ./rdlock studb1
+1-6 Use : # ./wrlock studb1
+
+
