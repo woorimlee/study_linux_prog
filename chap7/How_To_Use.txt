@@ -3,3 +3,6 @@
 
 2-1. 'copy' file A to file B. This file is same with 'copy' of chap4. The only difference is what function is used. (open() in chap4, fopen() in chap7)
 2-2. Use : # ./copy fileA fileB
+
+3-1. 'line_count' counts file A's total line number. 
+3-2. Use : # ./line_count fileA
