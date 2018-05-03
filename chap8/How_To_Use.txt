@@ -1,0 +1,6 @@
+1-1. 'environ' is a file to check out all lists of Environment Variables.
+1-2. Usage : # ./environ
+
+2-1. 'printenv' is a file to check Environment Variables with 'getenv' function.
+2-2. Usage : # ./printenv
+
