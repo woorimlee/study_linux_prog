@@ -4,3 +4,6 @@
 2-1. 'printenv' is a file to check Environment Variables with 'getenv' function.
 2-2. Usage : # ./printenv
 
+3-1. 'atexit' is a file to how to make c file which register exit handler.
+3-2. The exit handler registerd reverse order.
+3-3. If you want to check that reverse order, just type this "# ./atexit".
