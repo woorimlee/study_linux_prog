@@ -7,3 +7,6 @@
 3-1. 'atexit' is a file to how to make c file which register exit handler.
 3-2. The exit handler registerd reverse order.
 3-3. If you want to check that reverse order, just type this "# ./atexit".
+
+4-1. 'uid' is a file to check from user ID to group ID.
+4-2. Usage : # ./uid
