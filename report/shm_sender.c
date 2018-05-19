@@ -19,7 +19,7 @@ int main(void)
     //shmflg : 1) IPC_CREAT,   2) IPC_EXCL
     //allocates a System V shared memory segment
     //On success, a valid shared memory identifier is returned.  On error, -1 is  returned
-    if((shm_id == shmget((key_t)4321, MEM_SIZE, IPC_CREAT|0666)) == -1)
+    if((shm_id = shmget((key_t)4321, MEM_SIZE, IPC_CREAT|0666)) == -1)
     {
 	printf("shmget() failed\n");
 	return -1;
