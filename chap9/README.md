@@ -1,6 +1,15 @@
 Chapter 9 : 프로세스 제어 
 ========================
-  
+
+## 0. 첨부된 파일 설명
++ fork_getpid_wait.c : fork & getpid & wait 함수를 사용하는 간단한 예제.
++ wait_macro.c : macro를 통해 wait 한 child process가 어떤 상태로 끝났는지 확인하는 예제.
++ exec_01 & exec_02.c : execl과 execvp를 사용하는 간단한 예제.
++ system_func.c : system() syscall을 사용하는 간단한 예제.
++ system_implement.c : system() syscall을 구현한 예제.
++ redirect.c : 입출력 재지정을 구현한 예제.
++ getpgrp_func.c : getpgrp() 함수를 사용하는 간단한 예제.
++ setpgid_func.c : setpgid() 함수를 사용하는 간단한 예제.
   
 ## 1. fork() 시스템 호출시 
 + 부모 프로세스 : 자식의 pid 값을 반환받음. 또한 자식에게 1) fork 반환 값, 2) pid, 3) 부모가 설정한 프로세스 잠금 & 파일 잠금 상태, 4) 설정된 시그널과 알람은 상속하지 않음.
