@@ -61,3 +61,7 @@ Chapter 9 : 프로세스 제어
   + ECHILD : 자식 프로세스가 없거나, 설정된 pid가 자식 프로세스가 아님.
   + EINTR : 시스템 콜 중에 인터럽트에 의해 수행이 중단됨.
 
+## 9. 입출력 재지정의 구현(Redirect)
++ 명령어 > 파일 형식으로 쉘 상에서 사용하던 입출력 재지정을 구현하기 위해서 dup() 함수를 사용함.
++ 예를 들어 dup2(fd, 1); 선언을 하면 fd를 stdout에 복사하기 때문에 모니터로 출력되는 모든 것들이 fd가 가리키는 파일에 출력된다.
++ redirect.c는 출력 재지정을 구현한 코드다. USAGE : 1) ./redirect test_redirect wc redirect.c,   2) cat test_redirect 
