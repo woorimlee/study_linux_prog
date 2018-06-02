@@ -14,8 +14,28 @@ Chapter 9 : 프로세스 제어
 + wait() 함수의 return 값은 자식 프로세스의 pid 값이다.
 + wait() 함수를 호출할 때 int 형 변수를 인자로 넘겨주면 자식 프로세스로부터 받은 종료 코드 값이 int형 4 바이트 중 3번째 바이트에 저장되므로 우로 8 비트 이동해서 print해 확인할 수 있다.
   + 인자로 넘겨준 int형 변수(보통 status라는 이름)에 chlid에 대한 추가적인 정보가 저장되어 있으니 Macro 함수들을(WIFEXITED, WIFSTOPPED, ...) 이용해 그 상태를 확인해볼 수 있음.
-    * WIFEXITED : return true if the process terminated normally (WEXITSTATUS : get exit status)
-    * WIFSIGNALED : returns true if a signal caused the process' termination (abnormal) (WTERMSIG : fetch the signal number that caused the termination)
-    * WIFSTOPPED : return true if the process was stopped
-    * WIFCONTINUED : return true if the process was stopped or continued, respectively, and is currently being traced via the ptrace() system call (WSTOPSIG : fetch the signal number that caused the stop)
-+ wait_macro.c 파일의 자식 프로세스가 terminated 되는 방법에 따라 (exit or abort) 다른 값이 printf됨.
+    + WIFEXITED : return true if the process terminated normally (WEXITSTATUS : get exit status)
+    + WIFSIGNALED : returns true if a signal caused the process' termination (abnormal) (WTERMSIG : fetch the signal number that caused the termination)
+    + WIFSTOPPED : return true if the process was stopped
+    + WIFCONTINUED : return true if the process was stopped or continued, respectively, and is currently being traced via the ptrace() system call (WSTOPSIG : fetch the signal number that caused the stop)
+* wait_macro.c 파일의 자식 프로세스가 terminated 되는 방법에 따라 (exit or abort) 다른 값이 printf됨.
+
+## 3. waitpid() 시스템 콜에 대해서
++ Additional parameters allow for fine-tuning -> more powrful version of wait().
++ 자식 프로세스의 pid만 안다면 원하는 프로세스 만의 종료를 기다리게 만들 수 있음.
++ pid_t waitpid(pid_t pid, int *status, int options)의 원형에서 pid 값은 다음의 네가지 경우에 따라 상황이 분리된다.
+  + 1) pid < -1 : 프로세스 그룹 아이디가 pid의 절대값과 같은 자식 프로세스를 기다린다.
+  + 2) pid == -1 : child process 아무나 기다린다. wait() 함수와 동일.
+  + 3) pid == 0 : 부모 프로세스의 ID와 프로세스 그룹 ID와 같은 자식 프로세스의 종료를 기다린다.
+  + 4) pid > 0 : 넘어온 pid 값의 프로세스 종료를 기다린다.
++ options에 다음의 값이 들어가면 
+  + 1) WNOHANG : waitpid 호출해도 블록하지 않는다. 즉, 어떤 자식이 종료되지 않아도 리턴하라는 것이다.
+  + 2) WUNTRACED : 자식 프로세스가 STOP하면 반환.
+  + 3) WCONTINUED : STOP되었던 자식 프로세스가 재실행되면 반한.
+
+## 4. Zombie 프로세스 ? 
++ 자식 프로세스가 종료됐는데 부모 프로세스가 wait를 호출하지 않았었다면, 그 자식 프로세스를 좀비 프로세스라고 부름(프로세스 테이블에 존재하는 상태)
++ 분명 자식 프로세스가 종료를 하겠다고 exit()호출을 했는데도 system resources를 계속 소비하는 상태임.
++ 정확히는 자식 프로세스가 보낸 SIGCHILD를 SIG_IGN해두지 않거나(무시하겠다는 설정) 적절한 처리를 하지 않았다면, 이런 일이 발생하는 것으로, 가장 기본적으로는 wait()호출을 해야 SIGCHILD를 처리할 수 있음.
++ 좀비 프로세스가 있는 상태에서 만약 부모 프로세스가 종료되면 좀비 프로세스의 부모 프로세스가 init 프로세스(1번 프로세스)로 바뀌는데, init 프로세스가 SIG_IGN으로 SIGCHILD에 대해 처리해주기 때문에 좀비 프로세스는 사라진다.
+
