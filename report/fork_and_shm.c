@@ -69,6 +69,7 @@ int main(void)
 	    exit(0);
 	}
     
+	printf("pid : %d\n", pid);
 	sleep(1);
     }
 
