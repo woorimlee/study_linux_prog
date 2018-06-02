@@ -15,7 +15,7 @@ int main() {
     }
     child = wait(&status);
     printf("[%d] process's pid value : %d\n", getpid(), pid);
-    printf("child process [%d] called exit().\n Terminate code : %d\n", child, status>>8);
+    printf("child process [%d] called exit().\n Terminate code : %d, %d\n", child, status>>8, status);
     
     return 0;
 }
