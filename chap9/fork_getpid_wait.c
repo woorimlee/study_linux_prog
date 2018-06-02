@@ -5,15 +5,17 @@
 #include <sys/wait.h>
 
 int main() {
-    pid_t pid;
+    pid_t pid, child = 0;
+    int status = 0;
 
     pid = fork();
     if(pid == 0) {
 	printf("[%d] process's pid value : %d\n", getpid(), pid);
 	exit(0);
     }
-    wait(NULL);
+    child = wait(&status);
     printf("[%d] process's pid value : %d\n", getpid(), pid);
+    printf("child process [%d] called exit().\n Terminate code : %d\n", child, status>>8);
     
     return 0;
 }
