@@ -57,7 +57,7 @@ Chapter 9 : 프로세스 제어
 + COW : fork시 fork 윗단의 코드나 쓸데없는 데이터 등을 복사하는 등의 lazy optimization strategy를 개선시키기 위해서 copy할 내용을 modify하기 전까지는 해당 내용을 공유만하고 있다가 modify 시도가 있을 시 copy를 하는 optimization 기술이다.
 + 현재의 리눅스에서는 fork가 COW기법을 사용하기 때문에 자식 프로세스 생성시 모든 자원을 복사하지 않고 attempts to modify 경우에만 복사하도록 구현되어 있다.
 
-## 7. exec() 시스템 콜에 대해서
+## 7. exec() 시스템 콜에 대해서 [더 자세한 정보](https://github.com/woorimlee/linux-network-programming/tree/master/%EB%A6%AC%EB%88%85%EC%8A%A4%EC%99%80_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%9D%B4%EB%A1%A0/4_Process_Management)
 + 프로세스가 exec()콜을 하면 exec 인자로 넘긴 프로그램으로 대치된다.
 + 프로세스를 새로 생성하는게 아니기 때문에 프로세스 번호는 바뀌지 않는다.
 + 또한, 기존의 프로그램이 없어지기 때문에 return 할 위치가 없어지기 때문에 exec() syscall이 성공한 경우에는 반환하지 않으며 실패시에만 -1을 return한다.
