@@ -67,10 +67,10 @@
   + 이미 detach된 스레드에 대해선 호출 결과가 정의되어 있지 않다.
 + 스레드 join & detach를 통해 해당 스레드가 종료되었을 때 시스템 리소스를 해제할 수 있다.
 
-## 3. 첨부된 예제 컴파일시 명령어
+## 3. 첨부된 예제 __thread_ex__  컴파일시 명령어
 + gcc -o thread_ex thread_ex.c -pthread
 
-## 4. 첨부된 예제 실행시
+## 4. 첨부된 예제 __thread_ex__ 실행시
 Thing 1
   
   
@@ -79,3 +79,21 @@ Thing 2
   
 의 결과 값이 나오거나, 위 아래가 바뀔 수 있다.
 스케줄링 기법에 따라 실행되는 순서가 다를 뿐이니 걱정하지 말자.
+
+## 5. Pthread 뮤텍스
++ mutual exclusion을 보장하기 위한 한 가지 알고리즘인 뮤텍스.
++ Mutex는 사실 MUTual EXclusion의 줄임말이다.
+  + pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+  + mutex라는 이름의 뮤텍스를 선언하고 초기화하는 함수다.
++ 뮤텍스 락을 걸기 위해선 pthread_mutex_lock() 함수를 사용한다.
+  + int pthread_mutex_lock (pthread_mutex_t *mutex);
+  + 호출 성공시 mutex로 지정한 mutex가 사용가능해질 때까지 호출한 스레드를 block 한다.
+  + 뮤텍스가 사용가능한 상태가 되면, 호출한 스레드는 꺠어나고 이 함수는 0을 반환한다(즉시 사용 가능한 상태면 이 함수는 바로 리턴)
+  + 보통 에러가 나지 않기 때문에 반환 값을 따로 처리하거나 하진 않는다.
++ 뮤텍스 락을 해제하기 위해선 pthread_mutex_unlock() 함수를 사용한다.
+  + int ptread_mutex_unlock (pthread_mutex_t *mutex);
+  + 함수 호출 성공시 mutex로 지정한 뮤텍스를 해제하고 0을 반환한다.
+  + 이 함수는 블록되지 않는다.
+
+## 6. 첨부된 예제 __mutex_ex__ 
++ 의 .c파일에서 뮤텍스를 적용하기 전과 후의 결과물 차이를 통해 상호 배제에 따른 결과 차이를 알 수 있다.
