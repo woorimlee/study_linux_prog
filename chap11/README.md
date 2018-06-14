@@ -3,7 +3,8 @@
 ### 0. 첨부한 c 코드 
 + alarm.c는 '1. 시그널'의 SIGALRM을 사용하는 예시다.
 + alarm_handler.c는 '2. 시그널처리'의 SIGALRM을 사용하는 예시다.
-
++ pause.c는 '2. 시그널처리'의 pause() 함수 사용 예시다.
++ sigaction.c는 '2. 시그널처리'의 sigaction() 함수 사용 예시다.
 
 ### 1. 시그널
 + 예기치 않은 사건이 발생할 때 이를 알리는 소프트웨어 인터럽트.
@@ -47,4 +48,27 @@
   + handler의 매개변수로 사용자 정의 함수, SIG_IGN, SIG_DFL을 넘겨줄 수 있다.
     + SIG_IGN : 해당 시그널을 무시한다. SIGKILL, SIGSTOP을 제외하고 사용가능하다.
     + SIG_DFL : 해당 시그널을 디폴트 처리 함수를 사용하겠다는 말이다.
-    
+  + 이 함수는 void 타입을 return한다. no standard place in the program for this function to return 이기 때문이다.
++ 시그널을 받을 때까지 프로세스를 중지시키는 pause() syscall. 프로세스는 인터럽트를 받을 수 있는 wait 상태로 전환된다.
+  + 시그널을 받으면 -1을 리턴하고 errno는 EINTR로 설정되며 중지가 풀린다.
+  + 만약 무시되는 시그널을 받으면 프로세스는 wake up 하지 못한다.
++ signal() 함수보다 정교하게 시그널 처리기를 등록하기 위해선 sigaction() 함수를 사용한다.
+  + sigaction 구조체를 사용하여 좀 더 정교한 시그널 처리 액션을 등록할 수 있다.
+  + int sigaction(int signum ,const struct sigaction *act, struct sigaction *oldact);
+    + signum 시그널(SIGKILL & SIGSTOP 제외)이 수신됐을 때, 수행할 새로운 액션은 act가 됙, 이전 액션은 oldact에 저장된다. 성공하면 0을, 실패하면 -1을 반환한다.
+  + 시그널 처리 액션은 구조체 형태로 정의되고, 각 필드에 대한 설명은 다음과 같다.
+    + void (*sa_handler)(int) : 시그널 처리기를 나타내는 필드로 SIG_DFL, SIG_IGN, 사용자 정의 함수로 지정할 수 있다.
+    + void (*sa_sigaction)(int, siginfo_t *, void *) : sa_flags가 SA_SIGINFO일 때 sa_handler 대신에 동작하는 시그널 처리기. 시그널 번호, 시그널이 만들어진 이유, 시그널을 받는 프로세스 등을 받을 수 있다.
+    + sigset_t sa_mask : 시그널을 처리하는 동안 차단할 시그널 집합. 이런 기능을 시그널 마스크라 한다.
+    + int sa_flags : 시그널 처리 절차를 수정하는데 사용. 아래와 같은 값이 있다.
+      + SA_SIGINFO : sa_handler 대신 sa_sigaction 사용.
+      + SA_NOCLDSTOP : signum이 SIGCHLD일 경우, 자식 프로세스가 종료되거나 중단되었을 때 부모 프로세스에게 SIGCHLD가 전달되지 않는다.
+      + SA_ONESHOT : 시그널을 받으면 설정된 액션을 하고 시스템 기본 설정인 SIG_DFL로 재설정된다.
+      + SA_NOMASK : 시그널을 처리하는 동안에 전달되는 시그널은 차단되지 않는다.
+
+### 3. Executuon and Inheritance 
++ 부모 프로세스가 정의한 signal handler는 
+  1) fork() 할 시, 자식 프로세스는 exact the same signal semantics as the parent를 상속받는다.
+  2) 쉘에서 실행 시 주소 공간을 공유하지 않으니 부모가 설정한 핸들러가 default로 바뀐다.
+  + 자식 프로세스가 생성되고 exec() 되면, 부모 프로세스와 주소 공간을 공유하지 않기 때문에 부모가 사용하던 signal hadlers를 사용하지 못하고 시그널 액션은 기존의 default action으로 수행한다.
++ background에서 새로 executed 되는 프로세스는 interrupt & quit character(SIGINT & SIGQUIT)를 ignore(SIG_IGN) 해야 한다. (예. 쉘 프로세스는 SIGINT & SIGQUIT가 무시되어야 한다.)
