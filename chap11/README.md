@@ -5,6 +5,9 @@
 + alarm_handler.c는 '2. 시그널처리'의 SIGALRM을 사용하는 예시다.
 + pause.c는 '2. 시그널처리'의 pause() 함수 사용 예시다.
 + sigaction.c는 '2. 시그널처리'의 sigaction() 함수 사용 예시다.
++ time_limit.c는 '4. 시그널 보내기'의 kill() 함수 사용 예시다. 
+    + ex) $ ./time_limit 제한시간(초) command명령어 명령어옵션
++ kill.c는 '4. 시그널 보내기'의 kill() 함수를 사용한 예시다.
 
 ### 1. 시그널
 + 예기치 않은 사건이 발생할 때 이를 알리는 소프트웨어 인터럽트.
@@ -25,7 +28,7 @@
   + SIGSEGV : 유효하지 않은 메모리 참조(Segmentation violation(unmapped memory access)). (종료)
   + SIGUSR1 ~ 2 : 사용자 정의 시그널. (종료)
   + SIGTRAP : 프로세스가 실행하다 브레이크 포인트 도달하거나 넘으면 발생. 디버거가 캐치함. (무시)
-  + SIGHUP : 터미널 연결이 끊겼을 시, 세션의 리더한테 이 신호를 보낸다. (종료) 
+  + SIGHUP : 터미널 연결이 끊겼을 때 발생(보통 사용자 로그아웃). 세션의 리더한테 이 신호를 보낸다. (종료) 
   + SIGILL : 프로세스가 illegal macine instruction을 수행하려 할 시 보내는 시그널. (종료(코어 덤프 생성))
   + SIGXFSZ : 프로세스가 file size limit를 초과하려 한다면 보내는 시그널. (종료)
   
@@ -72,3 +75,19 @@
   2) 쉘에서 실행 시 주소 공간을 공유하지 않으니 부모가 설정한 핸들러가 default로 바뀐다.
   + 자식 프로세스가 생성되고 exec() 되면, 부모 프로세스와 주소 공간을 공유하지 않기 때문에 부모가 사용하던 signal hadlers를 사용하지 못하고 시그널 액션은 기존의 default action으로 수행한다.
 + background에서 새로 executed 되는 프로세스는 interrupt & quit character(SIGINT & SIGQUIT)를 ignore(SIG_IGN) 해야 한다. (예. 쉘 프로세스는 SIGINT & SIGQUIT가 무시되어야 한다.)
+
+### 4. 시그널 보내기
++ kill 명령어를 사용해 특정 프로세스에 임의의 시그널을 강제적으로 보낸다. 
+  + 커맨드 명령어 kill -l로 시그널 리스트를 출력할 수 있고, 출력된 리스트는 1번부터 순서대로 나열된다.
+  + kill -시그널 PID
++ kill() syscall은 원하는 pid에 시그널 signo를 보낼 수 있다.
+  + int kill(int pid, int signo)
+    + pid에 signo를 보내고, 성공하면 0, 실패하면 -1을 반환한다.
+    + pid > 0 : 특정 pid에 시그널을 보냄.
+    + pid == 0 : PGID가 동일한 프로세스들에게 시그널을 보낸다.
+    + pid < 0 : PGID가 똑같고 pid의 절대값이 같은 프로세스에게 시그널을 보낸다.
+    + pid == -1 : POSIX.1에서는 unspecifed condition으로 정함(used as a broadcast signal in SVR4, 4.3+BSD).
++ 시그널 보내기가 성공하기 위해서는 보내는 프로세스의 사용자가 프로세스 pid의 사용자와 같거나 혹은 보내는 프로세스의 사용자가 슈퍼유저여야 한다.
++ raise() 함수를 사용해 자기 자신에게 시그널을 보낼 수 있다.
+  + int raise(int sigCode);
+  + 사실 kill(getpid(), signo)와 같다.
