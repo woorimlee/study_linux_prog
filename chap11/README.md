@@ -8,6 +8,7 @@
 + time_limit.c는 '4. 시그널 보내기'의 kill() 함수 사용 예시다. 
     + ex) $ ./time_limit 제한시간(초) command명령어 명령어옵션
 + kill.c는 '4. 시그널 보내기'의 kill() 함수를 사용한 예시다.
++ jump.c는 '5. 시그널과 비지역 점프'의 setjmp() 함수와 longjmp() 함수의 사용 예시다.
 
 ### 1. 시그널
 + 예기치 않은 사건이 발생할 때 이를 알리는 소프트웨어 인터럽트.
@@ -73,7 +74,7 @@
 + 부모 프로세스가 정의한 signal handler는 
   1) fork() 할 시, 자식 프로세스는 exact the same signal semantics as the parent를 상속받는다.
   2) 쉘에서 실행 시 주소 공간을 공유하지 않으니 부모가 설정한 핸들러가 default로 바뀐다.
-  + 자식 프로세스가 생성되고 exec() 되면, 부모 프로세스와 주소 공간을 공유하지 않기 때문에 부모가 사용하던 signal hadlers를 사용하지 못하고 시그널 액션은 기존의 default action으로 수행한다.
++ 자식 프로세스가 생성되고 exec() 되면, 부모 프로세스와 주소 공간을 공유하지 않기 때문에 부모가 사용하던 signal hadlers를 사용하지 못하고 시그널 액션은 기존의 default action으로 수행한다.
 + background에서 새로 executed 되는 프로세스는 interrupt & quit character(SIGINT & SIGQUIT)를 ignore(SIG_IGN) 해야 한다. (예. 쉘 프로세스는 SIGINT & SIGQUIT가 무시되어야 한다.)
 
 ### 4. 시그널 보내기
@@ -91,3 +92,12 @@
 + raise() 함수를 사용해 자기 자신에게 시그널을 보낼 수 있다.
   + int raise(int sigCode);
   + 사실 kill(getpid(), signo)와 같다.
+
+### 5. 시그널과 비지역 점프(Non-local jump)
++ 예외를 만나거나 인터럽트 시그널을 받게되면, 프로세스의 실행 위치가 어디에 있던지 프로그램의 특정 루틴으로 돌아가야 하는 상황을 생각해볼 수 있다. 이러한 상황은 setjmp()와 longjmp() 두 함수를 이용하여 처리할 수 있다.
++ longjmp() 함수는 일종의 비지역 점프로, setjmp() 함수에 의해 설정된 지점으로 점프하게 된다.
+  + void longjmp(jmp_buf env, int val);
+  + env에 저장된 상태를 복구하여 스택 내용 드잉 저장된 곳으로 비지역 점프한다. 상응하는 setjmp() 함수가 실행된 뒤 val 값을 반환하게 한다.
++ setjmp() 함수는 두 번 반환할 수 있는데, 처음 호출되었을 때는 복귀 주소를 포함한 프로그램의 현재 상태(주로 runtime stack 내용)를 저장하고 반환한다. longjmp()를 호출 한 뒤 setjmp() 함수에 으해 저장된 상태를 복구하면 두 번째로 setjmp() 함수가 반환된다. 처음 반환시 0을 반환, 두 번째는 0이 아닌 값을 반환한다.
+  + int setjmp(jmp_buf env);
+  + 비지역 점프를 위해 스택 내용 등을 env에 저장한다. setjum()는 처음 반환할 때 0을 반한, 두 번째에 0이 아닌 longjmp에 의해 전해지는 val 값을(longjmp 함수에 넘겨주는 인자 값) 반환한다.
