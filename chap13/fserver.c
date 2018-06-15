@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+#include <signal.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -30,12 +33,31 @@ int main(int argc, char*argv[]) {
     memset((void *)&serveraddr, 0x00, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    server.sin_port = htons((unsigned short)port);
-    bind(listenfd, &serveraddr, sizeof(serveraddr));
+    serveraddr.sin_port = htons((unsigned short)port);
+    bind(listenfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
     listen(listenfd, 5);
 
     while(1) {
 	clientlen = sizeof(clientaddr);
-	connfd = accept(listenfd, &clientaddr, &clientlen);
+	connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
 
-	hp = gethostbyaddr((
+	hp = gethostbyaddr((char *)&clientaddr.sin_addr.s_addr, sizeof(clientaddr.sin_addr.s_addr), AF_INET);
+	haddrp = inet_ntoa(clientaddr.sin_addr);
+	printf("서버 : %s (%s) %d에 연결됨\n", hp->h_name, haddrp, clientaddr.sin_port);
+
+	if(fork () == 0) {
+	    read(connfd, inmsg, MAXLINE);
+	    fp = fopen(inmsg, "r");
+	    if (fp == NULL) {
+		write(connfd, "해당 파일 없음", 10);
+	    } 
+	    else {
+		while(fgets(outmsg, MAXLINE, fp) != NULL) 
+		    write(connfd, outmsg, strlen(outmsg)+1);
+	    }
+	    close(connfd);
+	    exit(0);
+	}
+	else close(connfd);
+    }
+}
